@@ -1,0 +1,50 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Edit {{ title }}
+{% endblock %}
+
+{% block body %}
+    <h3>Edit {{ title }}</h3>
+
+    <form action="{% url 'edit' title %}" method="POST" class="needs-validation" novalidate>
+        <div class="form-group">
+            {% csrf_token %}
+            <div class="form-row">
+                <label>Your Entry Title</label>
+                <input type="text" name="title" minlength="2" class="form-control" placeholder="Entry Title"
+                       {% if title %} value="{{ title }}" {% endif %} required>
+                <div class="valid-feedback"> Title is OK</div>
+                <div class="invalid-feedback"> Title should be at least 2 characters, and Not duplicated!</div>
+            </div>
+            <div class="form-row">
+                <label>Your Main Entry</label>
+                <textarea class="form-control" minlength="10" name="body" rows="10" placeholder="your entry as Markup"
+                            required>{% if body %} {{ body }} {% endif %}</textarea>
+                <div class="valid-feedback"> Body Text is OK</div>
+                <div class="invalid-feedback"> Body should be at least 10 characters!</div>
+            </div>
+        </div>
+        <input class="btn btn-primary btn-block" type="submit" value="save">
+    </form>
+
+    <script>
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+{% endblock %}
